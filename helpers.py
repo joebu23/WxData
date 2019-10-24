@@ -54,8 +54,14 @@ def getForecastData(year, month, day):
     urlBase = 'https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=SFTMI%20&e='
 
     urlToOpen = urlBase + str(year) + str(month) + str(day) + '2215' # '201811182215'
+
+    print(urlToOpen)
     url_get = requests.get(urlToOpen)
 
     soup = BeautifulSoup(url_get.content, 'html.parser')
     data_pre = soup.pre
-    return data_pre.prettify().splitlines()
+
+    if (data_pre):
+        return data_pre.prettify().splitlines()
+    else:
+        return ''
