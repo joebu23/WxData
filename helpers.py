@@ -50,13 +50,13 @@ def getForecast(forecastString):
         return 'Freezing Drizzle'
     return forecastString
 
-def getForecastData(year, month, day):
-    urlBase = 'https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=SFTMI%20&e='
+def getForecastData(url): #year, month, day):
+    # urlBase = 'https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=SFTMI%20&e='
 
-    urlToOpen = urlBase + str(year) + str(month) + str(day) + '2215' # '201811182215'
+    # urlToOpen = urlBase + str(year) + str(month) + str(day) + '2115' # '201811182215'
 
-    print(urlToOpen)
-    url_get = requests.get(urlToOpen)
+    print(url)
+    url_get = requests.get(url)
 
     soup = BeautifulSoup(url_get.content, 'html.parser')
     data_pre = soup.pre
@@ -65,3 +65,21 @@ def getForecastData(year, month, day):
         return data_pre.prettify().splitlines()
     else:
         return ''
+
+def getUrl(year, month, day):
+    # https://mesonet.agron.iastate.edu/wx/afos/list.phtml?source=GRR&year=2012&month=4&day=21&view=grid&order=asc
+    baseUrl = 'https://mesonet.agron.iastate.edu/wx/afos/list.phtml?source=GRR&year=' + str(year) + '&month=' + str(month) + '&day=' + str(day) + '&view=grid&order=asc'
+
+    url_get = requests.get(baseUrl)
+
+    soup = BeautifulSoup(url_get.content, 'html.parser')
+    data_sftmi = soup.find("div", {"id": "sectSFTMI "})
+
+    last_link = ''
+
+    if (data_sftmi):
+        children = data_sftmi.findChildren("a" , recursive=False)
+        for child in children:
+            last_link = child['href']
+
+    return 'https://mesonet.agron.iastate.edu/wx/afos/' + last_link.replace(' ', '%20')

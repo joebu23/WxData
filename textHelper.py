@@ -10,7 +10,7 @@ def getLinesWithPertinentData(data):
             if d.strip()[:4] == 'FCST':
                 dateCounter = counter
 
-            if d.strip() == 'Grand Rapids':
+            if d.strip().lower() == 'grand rapids':
                 cityCounter = counter
     
             counter = counter + 1
@@ -35,15 +35,3 @@ def generateForecastData(dataline):
             forecastList.append(helpers.getForecast(f))
 
     return forecastList
-
-
-
-# dayData = data[dateCounter+2].strip().split('  ')
-# for d in dayData:
-#     days.append(helpers.getDateObject(d.strip(), 2018))
-
-# # city = print(data[cityCounter].strip())
-# forecastData = data[cityCounter+1].strip().split(' ')
-# for f in forecastData:
-#     if f:
-#         forecasts.append(helpers.getForecast(f))
